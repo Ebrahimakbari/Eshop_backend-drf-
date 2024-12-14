@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="product-detail">
+    <h1>{{ product.title }}</h1>
+    <input type="hidden" id="product-id" value="{{ product.id }}">
+    
+    <div id="comments-container"></div>
+
+    <form id="comment-form">
+        {% csrf_token %}
+        <input type="hidden" id="parent-id" name="parent_id">
+        <textarea id="comment-text" name="text" required></textarea>
+        <button type="submit">ارسال کامنت</button>
+    </form>
+</div>
+{% endblock %}

@@ -27,7 +27,6 @@ class LoginView(APIView):
         )
         
         if serializer.is_valid():
-            # آماده‌سازی اطلاعات پاسخ
             response_data = {
                 'user_id': serializer.validated_data['user'].id,
                 'username': serializer.validated_data['user'].username,
@@ -36,7 +35,6 @@ class LoginView(APIView):
                 'refresh_token': serializer.validated_data['refresh']
             }
             
-            # سریالایز کردن پاسخ
             response_serializer = UserLoginResponseSerializer(data=response_data)
             response_serializer.is_valid(raise_exception=True)
             
@@ -54,10 +52,8 @@ class LoginView(APIView):
 class LogoutView(APIView):
     def post(self, request):
         try:
-            # دریافت توکن ریفرش از هدر درخواست
             refresh_token = request.data.get('refresh_token')
             
-            # blacklist کردن توکن
             from rest_framework_simplejwt.tokens import RefreshToken
             token = RefreshToken(refresh_token)
             token.blacklist()

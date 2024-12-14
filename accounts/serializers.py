@@ -2,13 +2,10 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.urls import reverse
 from django.conf import settings
-# from django.contrib.auth import authenticate
 from .authentications import AuthenticationBackend
 from rest_framework_simplejwt.tokens import RefreshToken
 import uuid
-from django.contrib.auth.backends import BaseBackend
 
 User = get_user_model()
 
@@ -26,23 +23,19 @@ class LoginSerializer(serializers.Serializer):
         password = attrs.get('password', None)
 
         if email and password:
-            # احراز هویت کاربر
             user = AuthenticationBackend.authenticate(
                 email=email, 
                 password=password
             )
 
-            # بررسی وضعیت کاربر
             if not user:
                 raise serializers.ValidationError('اطلاعات ورود نادرست است')
             
             if not user.is_active:
                 raise serializers.ValidationError('حساب کاربری شما فعال نیست')
 
-            # تولید توکن
             refresh = RefreshToken.for_user(user)
             
-            # اطلاعات برگشتی
             attrs['user'] = user
             attrs['refresh'] = str(refresh)
             attrs['access'] = str(refresh.access_token)
@@ -84,7 +77,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs.pop('confirm_password'):
             raise serializers.ValidationError({"password": "رمزهای عبور مطابقت ندارند"})
         
-        # بررسی یکتایی ایمیل و نام کاربری
         if User.objects.filter(email=attrs['email']).exists():
             raise serializers.ValidationError({"email": "این ایمیل قبلاً ثبت شده است"})
         
@@ -94,7 +86,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # ایجاد توکن تایید ایمیل
         email_verification_token = str(uuid.uuid4())
         
         user = User.objects.create_user(
@@ -107,7 +98,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             token_created_at=timezone.now()
         )
         
-        # ارسال ایمیل تایید
         try:
             request = self.context.get('request')
             verification_link = f"http://{request.get_host()}/accounts/verify-email/{email_verification_token}/"
@@ -168,7 +158,6 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError({"password": "رمزهای عبور مطابقت ندارند"})
         
-        # بررسی دوباره اعتبار توکن
         try:
             user = User.objects.get(
                 token=attrs['token'], 
