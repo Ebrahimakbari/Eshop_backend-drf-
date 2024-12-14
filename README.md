@@ -26,7 +26,7 @@ To install the project, follow these steps:
 
 1. Clone the repository:
 ```
-git clone https://github.com/ebrahim_akbari/eshop_django_backend.git
+https://github.com/Ebrahimakbari/Eshop_backend.git
 ```
 2. Install the required dependencies:
 ```
