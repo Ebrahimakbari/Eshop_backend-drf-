@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     # third_party_apps
     'rest_framework',
+    'drf_yasg',
 ]
 
 
