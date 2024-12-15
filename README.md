@@ -1,4 +1,4 @@
-# Eshop_django_backend
+# Eshop_django_backend(drf)
 
 This is a Django project for an e-commerce website. The project includes the following features:
 
