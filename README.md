@@ -1,4 +1,4 @@
-# Eshop_django_backend(drf)
+# Eshop_django_backend with DRF and JWT
 
 This is a Django project for an e-commerce website. The project includes the following features:
 
