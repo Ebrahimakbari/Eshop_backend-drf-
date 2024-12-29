@@ -45,6 +45,16 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+## Docker:
+1. 
+   ```
+   docker compose up --build
+   ```
+2. 
+   ```
+   docker compose run python manage.py migrate
+   ```
+
 ## Usage
 
 To use the project, follow these steps:

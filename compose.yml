@@ -1,0 +1,32 @@
+services:
+  db:
+    container_name: db
+    image: postgres:17
+    ports:
+      - 5432:5432
+    networks:
+      - main
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    restart: always
+  web:
+    container_name: web
+    build: .
+    ports:
+      - 8000:8000
+    networks:
+      - main
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - ./.env
+    volumes:
+      - .:/Code/
+    restart: always
+    depends_on:
+      - db
+volumes:
+  postgres_data:
+networks:
+  main:
